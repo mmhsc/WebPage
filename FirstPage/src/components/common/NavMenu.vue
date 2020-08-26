@@ -1,6 +1,6 @@
 <template>
   <el-menu
-    :default-active="'/index'"
+    :default-active="this.$route.path"
     router
     mode="horizontal"
     @select="handleSelect"
@@ -26,7 +26,7 @@ export default {
         {name: '/index', navItem: '首页'},
         {name: '/province', navItem: '省级项目'},
         {name: '/city', navItem: '市级项目'},
-        {name: '/subscribe', navItem: '订阅'}
+        {name: '/profile', navItem: '用户管理'}
       ]
     }
   },

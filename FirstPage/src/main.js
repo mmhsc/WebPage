@@ -15,6 +15,9 @@ var axios = require('axios')
 // axios.defaults.baseURL = 'http://47.104.188.61:8443/api'
 axios.defaults.baseURL = 'http://127.0.0.1:8443/api'
 
+// 开启withCredentials功能
+axios.defaults.withCredentials = true
+
 // 全局注册，之后可在其它组件中通过this.$axios()发送数据
 Vue.prototype.$axios = axios
 
@@ -23,7 +26,17 @@ Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     if (store.state.user.username) {
-      next()
+      axios.get('/authentication')
+        .then(resp => {
+          if (resp.data) {
+            next()
+          } else {
+            next({
+              path: 'login',
+              query: {redirect: to.fullPath}
+            })
+          }
+        })
     } else {
       next({
         path: 'login',

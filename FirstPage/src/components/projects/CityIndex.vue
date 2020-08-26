@@ -1,12 +1,12 @@
 <template>
   <el-container>
-      <el-aside style="width: 200px; margin-top: 20px">
-        <sideMenu @indexSelect="listByCategory" ref="sideMenu"></sideMenu>
-      </el-aside>
-      <el-main>
-        <city class="projectsArea" ref="projectsArea"></city>
-      </el-main>
-    </el-container>
+    <el-aside style="width: 200px; margin-top: 20px">
+      <sideMenu @indexSelect="listByCategory" ref="sideMenu"></sideMenu>
+    </el-aside>
+    <el-main>
+      <city class="projectsArea" ref="projectsArea"></city>
+    </el-main>
+  </el-container>
 </template>
 
 <script>

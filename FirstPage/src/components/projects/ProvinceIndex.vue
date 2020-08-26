@@ -18,7 +18,7 @@ export default{
   methods: {
     listByCategory () {
       var cid = this.$refs.sideMenu.cid
-      var url = 'categories/' + cid + '/projects'
+      var url = '/province/categories/' + cid + '/projects'
       this.$axios
         .get(url)
         .then(successResponse => {

@@ -21,7 +21,7 @@
               <el-form-item label="联系方式">
                 <span>{{ props.row.phonenumber }}</span>
               </el-form-item>
-              <el-form-item label="预算金额">
+              <el-form-item label="预算金额(万)">
                 <span>{{ props.row.budget }}</span>
               </el-form-item>
               <el-form-item label="发布日期">
@@ -68,7 +68,7 @@ export default {
   methods: {
     loadProjects () {
       this.$axios
-        .get('/city')
+        .get('/city/projects')
         .then(response => {
           if (response && response.status === 200) {
             this.projects = response.data

@@ -21,7 +21,7 @@
               <el-form-item label="联系方式">
                 <span>{{ props.row.phonenumber }}</span>
               </el-form-item>
-              <el-form-item label="预算金额">
+              <el-form-item label="预算金额(万)">
                 <span>{{ props.row.budget }}</span>
               </el-form-item>
               <el-form-item label="发布日期">
@@ -33,7 +33,7 @@
         <el-table-column label="项目名称" prop="item"></el-table-column>
         <el-table-column label="项目类别" prop="category"></el-table-column>
         <el-table-column label="招标单位" prop="purchaser"></el-table-column>
-        <el-table-column label="预算金额" prop="budget"></el-table-column>
+        <el-table-column label="预算金额(万)" prop="budget"></el-table-column>
         <el-table-column label="发布日期" prop="releasedate"></el-table-column>
       </el-table>
       <div class="pagination">
@@ -68,7 +68,7 @@ export default {
   methods: {
     loadProjects () {
       this.$axios
-        .get('/province')
+        .get('/province/projects')
         .then(response => {
           if (response && response.status === 200) {
             this.projects = response.data

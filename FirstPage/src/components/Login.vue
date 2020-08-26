@@ -12,7 +12,7 @@
       </el-form-item>
       <el-form-item style="width: 100%">
         <el-button type="primary" v-on:click="login">登录</el-button>
-        <!-- <el-button type="primary" v-on:click="register">注册</el-button> -->
+        <el-button type="primary" v-on:click="register">注册</el-button>
       </el-form-item>
     </el-form>
   </body>
@@ -47,6 +47,9 @@ export default {
         .catch(failResponse => {
           // console.log('登陆失败')
         })
+    },
+    register () {
+      this.$router.replace('/register')
     }
   }
 }

@@ -1,5 +1,7 @@
 <template>
-  <span>欢迎使用本展示系统</span>
+  <div>
+    <h1>欢迎使用本展示系统</h1>
+  </div>
 </template>
 
 <script>
@@ -9,4 +11,5 @@ export default {
 </script>
 
 <style>
+
 </style>
