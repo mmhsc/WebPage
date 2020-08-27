@@ -31,8 +31,9 @@ export default {
   },
   methods: {
     loadCategoryOptions () {
+      var url = '/categories/' + this.$store.state.user.username
       this.$axios
-        .get('/categories')
+        .get(url)
         .then(resp => {
           this.categoryOptions = resp.data
         })

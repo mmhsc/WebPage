@@ -17,5 +17,6 @@ public class Keyword {
     private int id;
 
     private String keyword;
+    private int pid;
 
 }

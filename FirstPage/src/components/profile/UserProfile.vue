@@ -8,7 +8,6 @@
         title="选择你的关键词"
         :visible.sync="dialogVisible">
         <span slot="footer" class="dialog-footer"></span>
-        <!-- <div style="margin: 15px 0;"></div> -->
         <el-checkbox-group v-model="keywords">
           <el-checkbox v-for="keyword in keywordOptions" :label="keyword" :key="keyword">{{keyword}}</el-checkbox>
           <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>

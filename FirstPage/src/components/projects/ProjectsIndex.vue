@@ -4,22 +4,23 @@
       <sideMenu @indexSelect="listByCategory" ref="sideMenu"></sideMenu>
     </el-aside>
     <el-main>
-      <city class="projectsArea" ref="projectsArea"></city>
+      <projects class="projectsArea" ref="projectsArea"></projects>
     </el-main>
   </el-container>
 </template>
 
 <script>
 import SideMenu from './SideMenu'
-import City from './City'
+import Projects from './Projects'
 export default{
-  name: 'CityIndex',
-  components: {SideMenu, City},
+  name: 'ProjectsIndex',
+  components: {SideMenu, Projects},
   methods: {
     listByCategory () {
+      var url = this.$route.path + '/searchByCategory'
       var category = this.$refs.sideMenu.category
       this.$axios
-        .post('/city/projects/searchByCategory', {'category': category})
+        .post(url, {'category': category})
         .then(successResponse => {
           if (successResponse.status === 200) {
             this.$refs.projectsArea.projects = successResponse.data

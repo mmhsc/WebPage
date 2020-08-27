@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'AdminMenu',
+  name: 'SideMenu',
   data () {
     return {}
   },

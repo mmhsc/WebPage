@@ -4,8 +4,7 @@ import Login from '../components/Login'
 import Register from '../components/Register'
 import Home from '../components/Home'
 import AppIndex from '../components/index/AppIndex'
-import CityIndex from '../components/projects/CityIndex'
-import ProvinceIndex from '../components/projects/ProvinceIndex'
+import ProjectsIndex from '../components/projects/ProjectsIndex'
 import UserProfile from '../components/profile/UserProfile'
 
 Vue.use(Router)
@@ -38,16 +37,16 @@ export default new Router({
         },
         {
           path: '/city/projects',
-          name: 'cityProjects',
-          component: CityIndex,
+          name: 'projects',
+          component: ProjectsIndex,
           meta: {
             requireAuth: true
           }
         },
         {
           path: '/province/projects',
-          name: 'provinceProjects',
-          component: ProvinceIndex,
+          name: 'projects',
+          component: ProjectsIndex,
           meta: {
             requireAuth: true
           }
