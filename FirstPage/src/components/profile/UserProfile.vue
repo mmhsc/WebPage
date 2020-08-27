@@ -4,49 +4,25 @@
       <sideMenu @editKeywords="edit"></sideMenu>
     </el-aside>
     <el-main>
-      <el-dialog
-        title="选择你的关键词"
-        :visible.sync="dialogVisible">
-        <span slot="footer" class="dialog-footer"></span>
-        <el-checkbox-group v-model="keywords">
-          <el-checkbox v-for="keyword in keywordOptions" :label="keyword" :key="keyword">{{keyword}}</el-checkbox>
-          <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-        </el-checkbox-group>
-        <br><br>
-        <el-button size="small" type="primary" @click="submit">提交</el-button>
-      </el-dialog>
+      <EditKey ref="editKey"></EditKey>
     </el-main>
   </el-container>
 </template>
 
 <script>
 import SideMenu from './SideMenu'
-const keywordOptions = ['公安', '教育', '法院', '消防']
+import EditKey from './EditKey'
 export default {
   name: 'UserProfile',
-  components: {SideMenu},
-  data () {
-    return {
-      dialogVisible: false,
-      checkAll: false,
-      keywords: [],
-      keywordOptions: keywordOptions,
-      isIndeterminate: true
-    }
-  },
+  components: {SideMenu, EditKey},
   methods: {
     edit () {
-      this.dialogVisible = true
-    },
-    handleCheckAllChange (val) {
-      this.checkedKeywords = val ? keywordOptions : []
-      this.isIndeterminate = false
-    },
-    submit () {
+      var url = '/categories/' + this.$store.state.user.username
       this.$axios
-        .post('/subscribe', {'keywords': this.keywords})
-        .then(successsResponse => {
-          this.dialogVisible = false
+        .get(url)
+        .then(Response => {
+          this.$refs.editKey.keywords = Response.data
+          this.$refs.editKey.dialogVisible = true
         })
         .catch(failResponse => {
           console.log(failResponse.data)
