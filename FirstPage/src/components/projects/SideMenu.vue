@@ -1,26 +1,19 @@
 <template>
   <el-menu
-    default-active="0"
-    class="category"
+    default-active="全部"
+    class="sideMenu"
     @select="handleSelect"
     active-text-color="red"
   >
-    <el-menu-item index="0">
+    <el-menu-item index="全部">
       <i class="el-icon-menu"></i>
       <span slot="title">全部</span>
     </el-menu-item>
-    <el-menu-item index="1">
+    <el-menu-item v-for="category in categoryOptions" :key="category" :index="category">
       <i class="el-icon-menu"></i>
-      <span slot="title">教育</span>
+      <span slot="title">{{category}}</span>
     </el-menu-item>
-    <el-menu-item index="2">
-      <i class="el-icon-menu"></i>
-      <span slot="title">公安</span>
-    </el-menu-item>
-    <el-menu-item index="3">
-      <i class="el-icon-menu"></i>
-      <span slot="title">法院</span>
-    </el-menu-item>
+
   </el-menu>
 </template>
 
@@ -29,12 +22,26 @@ export default {
   name: 'SideMenu',
   data () {
     return {
-      cid: ''
+      category: '',
+      categoryOptions: []
     }
   },
+  mounted: function () {
+    this.loadCategoryOptions()
+  },
   methods: {
+    loadCategoryOptions () {
+      this.$axios
+        .get('/categories')
+        .then(resp => {
+          this.categoryOptions = resp.data
+        })
+        .catch(resp => {
+          console.log('关键字初始化失败')
+        })
+    },
     handleSelect (key) {
-      this.cid = key
+      this.category = key
       this.$emit('indexSelect')
     }
   }
@@ -42,7 +49,7 @@ export default {
 </script>
 
 <style>
-.category {
+.sideMenu {
   position: fixed;
   margin-left: auto;
 }

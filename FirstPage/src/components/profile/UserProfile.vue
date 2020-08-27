@@ -47,7 +47,7 @@ export default {
       this.$axios
         .post('/subscribe', {'keywords': this.keywords})
         .then(successsResponse => {
-          console.log(successsResponse.data)
+          this.dialogVisible = false
         })
         .catch(failResponse => {
           console.log(failResponse.data)

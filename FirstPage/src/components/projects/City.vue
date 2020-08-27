@@ -80,7 +80,7 @@ export default {
     },
     search () {
       this.$axios
-        .post('/city/searchByDate', {start: this.$refs.searchBar.date[0], 'end': this.$refs.searchBar.date[1]})
+        .post('/city/projects/searchByDate', {start: this.$refs.searchBar.date[0], 'end': this.$refs.searchBar.date[1]})
         .then(successResponse => {
           if (successResponse.status === 200) {
             this.projects = successResponse.data

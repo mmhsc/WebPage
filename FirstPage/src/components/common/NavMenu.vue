@@ -24,8 +24,8 @@ export default {
     return {
       navList: [
         {name: '/index', navItem: '首页'},
-        {name: '/province', navItem: '省级项目'},
-        {name: '/city', navItem: '市级项目'},
+        {name: '/province/projects', navItem: '省级项目'},
+        {name: '/city/projects', navItem: '市级项目'},
         {name: '/profile', navItem: '用户管理'}
       ]
     }

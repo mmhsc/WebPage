@@ -11,6 +11,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,6 +42,15 @@ public class SubScribeController {
             subscriptionService.add(subscriptionEntity);
         }
         return ResultFactory.buildSuccessResult("修改成功");
+    }
+
+    @GetMapping(value = "/api/categories")
+    @ResponseBody
+    public List<String> getCategories() {
+        Subject subject = SecurityUtils.getSubject();
+        User user = userService.getUserByName(subject.getPrincipal().toString());
+        List<Integer> kidList = subscriptionService.getCategoryId(user.getId());
+        return keywordService.getCategories(kidList);
     }
 
 }

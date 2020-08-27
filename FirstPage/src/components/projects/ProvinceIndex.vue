@@ -17,10 +17,9 @@ export default{
   components: {SideMenu, Province},
   methods: {
     listByCategory () {
-      var cid = this.$refs.sideMenu.cid
-      var url = '/province/categories/' + cid + '/projects'
+      var category = this.$refs.sideMenu.category
       this.$axios
-        .get(url)
+        .post('/province/projects/searchByCategory', {'category': category})
         .then(successResponse => {
           if (successResponse.status === 200) {
             this.$refs.projectsArea.projects = successResponse.data

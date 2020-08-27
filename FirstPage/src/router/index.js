@@ -37,7 +37,7 @@ export default new Router({
           }
         },
         {
-          path: '/city',
+          path: '/city/projects',
           name: 'cityProjects',
           component: CityIndex,
           meta: {
@@ -45,7 +45,7 @@ export default new Router({
           }
         },
         {
-          path: '/province',
+          path: '/province/projects',
           name: 'provinceProjects',
           component: ProvinceIndex,
           meta: {
