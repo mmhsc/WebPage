@@ -13,12 +13,13 @@ cities = ["济南市", "青岛市", "淄博市", "枣庄市", "潍坊市", "烟�
         "济宁市", "菏泽市", "聊城市", "滨州市", "泰安市", "日照市", "威海市"]
 # db = {"ip": 'localhost', "user": 'root', "pwd": 'account4FTQ', "database": 'tender'}
 db = {"ip": '47.104.188.61', "user": 'root', "pwd": 'Root@123!', "database": 'zb'}
-keys = {"教育": ["大学", "学院", "学校", "研究院", "幼儿园", "中学", "高中"],
-        "公安": ["公安", "监狱"],
-        "法院": ["法院", "检察院"],
-        "消防": ["消防"],
-        "智能": ["机器人"]
-        }
+keys = {}
+# keys = {"教育": ["大学", "学院", "学校", "研究院", "幼儿园", "中学", "高中"],
+#         "公安": ["公安", "监狱"],
+#         "法院": ["法院", "检察院"],
+#         "消防": ["消防"],
+#         "智能": ["机器人"]
+#         }
 
 
 
@@ -241,9 +242,38 @@ def to_sql(data, address, user, pwd, db, table):
 
 
 '''
+    功能: 读取keywords表，构建关键字字典
+    result: 表中所有数据
+    mainKey: 大类
+    keys：关键字字典
+'''
+def getKeywords():
+    connection = pymysql.connect(db["ip"], db["user"], db["pwd"], db["database"], cursorclass=pymysql.cursors.DictCursor)
+    cursor = connection.cursor()
+    cursor.execute("select * from keywords")
+    result = cursor.fetchall()
+
+    mainKey = []
+    for key in result:
+        if(key['pid'] == 0):
+            mainKey.append(key)
+
+    keywords = {}
+    for key in mainKey:
+        keywords[key['keyword']] = []
+        for i in result:
+            if(i['pid'] == key['id']):
+                keywords[key['keyword']].append(i['keyword'])
+    
+    return keywords
+
+
+'''
     主函数
 '''
 def main(name):
+    global keys
+    keys = getKeywords()
     print("-------------------------\n" +
           "  正在准备新一轮数据更新   \n" +
           time.strftime("%Y-%m-%d %H:%M:%S") +
