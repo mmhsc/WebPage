@@ -260,7 +260,7 @@ def getKeywords():
 
     keywords = {}
     for key in mainKey:
-        keywords[key['keyword']] = []
+        keywords[key['keyword']] = [key['keyword']]
         for i in result:
             if(i['pid'] == key['id']):
                 keywords[key['keyword']].append(i['keyword'])
