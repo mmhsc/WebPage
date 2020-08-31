@@ -1,93 +1,44 @@
 package com.ftq.webpage.controller;
 
-import com.ftq.webpage.pojo.City;
-import com.ftq.webpage.pojo.Province;
-import com.ftq.webpage.pojo.User;
-import com.ftq.webpage.service.*;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
+import com.ftq.webpage.pojo.SearchCondition;
+import com.ftq.webpage.result.Result;
+import com.ftq.webpage.result.ResultFactory;
+import com.ftq.webpage.service.CityService;
+import com.ftq.webpage.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class ProjectController {
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private CityService cityService;
     @Autowired
     private ProvinceService provinceService;
-    @Autowired
-    private KeywordService keywordService;
-    @Autowired
-    private SubscriptionService subscriptionService;
 
-    @GetMapping(value = "/api/city/projects")
+    @PostMapping(value = "/api/city/projects")
     @ResponseBody
-    public List<City> getCityProjects() {
-        Subject subject = SecurityUtils.getSubject();
-        User user = userService.getUserByName(subject.getPrincipal().toString());
-        List<Integer> kidList = subscriptionService.getCategoryId(user.getId());
-        List<String> categories = keywordService.getCategories(kidList);
-        return cityService.getAllByCategories(categories);
+    public Result getCityProjects(@RequestBody SearchCondition condition) {
+        return ResultFactory.buildSuccessResult(cityService.getProjcts(condition));
     }
 
-    @GetMapping(value = "/api/province/projects")
+    @PostMapping(value = "/api/province/projects")
     @ResponseBody
-    public List<Province> getProvinceProjects() {
-        Subject subject = SecurityUtils.getSubject();
-        User user = userService.getUserByName(subject.getPrincipal().toString());
-        List<Integer> kidList = subscriptionService.getCategoryId(user.getId());
-        List<String> categories = keywordService.getCategories(kidList);
-        return provinceService.getAllByCategories(categories);
+    public Result getProvinceProjects(@RequestBody SearchCondition condition) {
+        return ResultFactory.buildSuccessResult(provinceService.getProjects(condition));
     }
 
-    @PostMapping(value = "/api/city/projects/searchByCategory")
+    @PostMapping(value = "/api/city/projects/num")
     @ResponseBody
-    public List<City> searchCityProjectsByCategory(@RequestBody Map<String, String> data) throws Exception{
-        String category = data.get("category");
-        if (category.equals("全部"))   return getCityProjects();
-
-        Subject subject = SecurityUtils.getSubject();
-        User user = userService.getUserByName(subject.getPrincipal().toString());
-        List<Integer> kidList = subscriptionService.getCategoryId(user.getId());
-        List<String> categories = keywordService.getCategories(kidList);
-        if (categories.contains(category)) return cityService.getAllByCategory(category);
-        else return new LinkedList<City>();
+    public Result getCityProjectNum(@RequestBody SearchCondition condition) {
+        return ResultFactory.buildSuccessResult(cityService.count(condition));
     }
 
-
-    @PostMapping(value = "/api/province/projects/searchByCategory")
+    @PostMapping(value = "/api/province/projects/num")
     @ResponseBody
-    public List<Province> searchProvinceProjectsByCategory(@RequestBody Map<String, String> data) throws Exception{
-        String category = data.get("category");
-        if (category.equals("全部"))   return getProvinceProjects();
-
-        Subject subject = SecurityUtils.getSubject();
-        User user = userService.getUserByName(subject.getPrincipal().toString());
-        List<Integer> kidList = subscriptionService.getCategoryId(user.getId());
-        List<String> categories = keywordService.getCategories(kidList);
-        if (categories.contains(category)) return provinceService.getAllByCategory(category);
-        else return new LinkedList<Province>();
-    }
-
-    @PostMapping(value = "/api/city/projects/searchByDate")
-    @ResponseBody
-    public List<City> searchCityProjectsByDate(@RequestBody Map<String, String> dateRange) {
-        return cityService.getAllByDate(dateRange.get("start"), dateRange.get("end"));
-    }
-
-    @PostMapping(value = "/api/province/projects/searchByDate")
-    @ResponseBody
-    public List<Province> searchProvinceProjectsByDate(@RequestBody Map<String, String> dateRange) {
-        return provinceService.getAllByDate(dateRange.get("start"), dateRange.get("end"));
+    public Result getProvinceProjectNum(@RequestBody SearchCondition condition) {
+        return ResultFactory.buildSuccessResult(provinceService.count(condition));
     }
 
 }

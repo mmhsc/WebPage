@@ -38,10 +38,22 @@ export default {
           }
         }]
       },
-      date: ''
+      defaultDate: [],
+      date: []
     }
   },
+  mounted: function () {
+    this.initDate()
+  },
   methods: {
+    initDate () {
+      const end = new Date()
+      const start = new Date()
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+      this.defaultDate[0] = start.toISOString()
+      this.defaultDate[1] = end.toISOString()
+      this.date = this.defaultDate
+    },
     search () {
       this.$emit('searchOn')
     }

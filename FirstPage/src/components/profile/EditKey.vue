@@ -15,7 +15,6 @@
 </template>
 
 <script>
-var keywordOptions = ['公安', '教育', '法院', '消防']
 export default {
   name: 'EditKey',
   data () {
@@ -23,13 +22,26 @@ export default {
       dialogVisible: false,
       checkAll: false,
       keywords: [],
-      keywordOptions: keywordOptions,
+      keywordOptions: [],
       isIndeterminate: true
     }
   },
+  mounted: function () {
+    this.initKeywordOptions()
+  },
   methods: {
+    initKeywordOptions () {
+      this.$axios
+        .get('/categories')
+        .then(resp => {
+          this.keywordOptions = resp.data
+        })
+        .catch(resp => {
+          console.log('关键字初始化失败')
+        })
+    },
     handleCheckAllChange (val) {
-      this.checkedKeywords = val ? keywordOptions : []
+      this.checkedKeywords = val ? this.keywordOptions : []
       this.isIndeterminate = false
     },
     submit () {
@@ -38,10 +50,9 @@ export default {
         .post('/subscribe', {'keywords': this.keywords})
         .then(successsResponse => {
           alert('修改成功')
-          console.log('修改成功')
         })
         .catch(failResponse => {
-          console.log(failResponse.data)
+          alert('修改失败')
         })
     }
   }

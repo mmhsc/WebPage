@@ -11,8 +11,8 @@ public interface SubscriptionDAO extends JpaRepository<SubscriptionEntity, Integ
 
     @Modifying
     @Transactional
-    public void deleteByUid(int uid);
+    void deleteByUid(int uid);
 
-    public List<SubscriptionEntity> getAllByUid(int uid);
+    List<SubscriptionEntity> getAllByUid(int uid);
 
 }

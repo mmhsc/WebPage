@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface KeywordDAO extends JpaRepository<Keyword, Integer> {
 
-    public Keyword getById(int id);
-    public List<Keyword> getByPid(int pid);
-    public Keyword getByKeyword(String keyword);
+    Keyword getById(int id);
+    List<Keyword> getByPid(int pid);
+    Keyword getByKeyword(String keyword);
 
 }

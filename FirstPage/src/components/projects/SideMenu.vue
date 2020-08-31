@@ -5,10 +5,6 @@
     @select="handleSelect"
     active-text-color="red"
   >
-    <el-menu-item index="全部">
-      <i class="el-icon-menu"></i>
-      <span slot="title">全部</span>
-    </el-menu-item>
     <el-menu-item v-for="category in categoryOptions" :key="category" :index="category">
       <i class="el-icon-menu"></i>
       <span slot="title">{{category}}</span>
@@ -22,7 +18,7 @@ export default {
   name: 'SideMenu',
   data () {
     return {
-      category: '',
+      category: [],
       categoryOptions: []
     }
   },
@@ -35,15 +31,17 @@ export default {
       this.$axios
         .get(url)
         .then(resp => {
-          this.categoryOptions = resp.data
+          this.categoryOptions = new Array('全部').concat(resp.data)
+          this.category = this.categoryOptions
+          this.$emit('load')
         })
         .catch(resp => {
           console.log('关键字初始化失败')
         })
     },
-    handleSelect (key) {
-      this.category = key
-      this.$emit('indexSelect')
+    handleSelect (keyword) {
+      this.category = (keyword === '全部') ? this.categoryOptions : [keyword]
+      this.$emit('categorySelect')
     }
   }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class SubScribeController {
+public class SubscribeController {
 
     @Autowired
     private UserService userService;
@@ -29,6 +29,7 @@ public class SubScribeController {
     @PostMapping(value = "/api/subscribe")
     @ResponseBody
     public Result subscribe(@RequestBody Map<String, List<String>> keywords) {
+        System.out.println(keywords);
         Subject subject = SecurityUtils.getSubject();
         User user = userService.getUserByName(subject.getPrincipal().toString());
         subscriptionService.deleteAllByUid(user.getId());

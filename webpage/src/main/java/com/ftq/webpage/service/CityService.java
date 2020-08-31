@@ -2,7 +2,9 @@ package com.ftq.webpage.service;
 
 import com.ftq.webpage.dao.CityDAO;
 import com.ftq.webpage.pojo.City;
+import com.ftq.webpage.pojo.SearchCondition;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -14,21 +16,14 @@ public class CityService {
     @Autowired
     CityDAO cityDAO;
 
-    public List<City> getAllByCategory(String category) {
-        return cityDAO.findAllByCategoryOrderByReleasedateDesc(category);
+    public long count(SearchCondition condition) {
+        return cityDAO.countByCategoryInAndReleasedateBetween(condition.getCategories(), condition.getStart(), condition.getEnd());
     }
 
-    public List<City> getAll() {
+    public List<City> getProjcts(SearchCondition condition) {
         Sort sort = Sort.by(Sort.Direction.DESC, "releasedate");
-        return cityDAO.findAll(sort);
-    }
-
-    public List<City> getAllByDate(String start, String end) {
-        return cityDAO.findAllByReleasedateBetweenOrderByReleasedateDesc(start, end);
-    }
-
-    public List<City> getAllByCategories(List<String> categories) {
-        return cityDAO.findAllByCategoryInOrderByReleasedateDesc(categories);
+        return cityDAO.findAllByCategoryInAndReleasedateBetween(condition.getCategories(), condition.getStart(),
+                condition.getEnd(), PageRequest.of(condition.getCurrentPage() - 1, condition.getPagesize(), sort));
     }
 
 }

@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-row style="height: 840px;">
-      <SearchBar @searchOn="search" ref="searchBar"></SearchBar>
-      <el-table :data="projects.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100%" border>
+      <SearchBar @searchOn="searchByDate" ref="searchBar"></SearchBar>
+      <el-table :data="projects" style="width: 100%" border>
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="project-table-expand">
@@ -21,11 +21,11 @@
               <el-form-item label="联系方式">
                 <span>{{ props.row.phonenumber }}</span>
               </el-form-item>
-              <el-form-item label="预算金额(万)">
-                <span>{{ props.row.budget }}</span>
+              <el-form-item label="预算金额">
+                <span>{{ props.row.budget }}万</span>
               </el-form-item>
               <el-form-item label="发布日期">
-                <span>{{ props.row.releasedate }}</span>
+                <span>{{ props.row.releasedate }}</span>s
               </el-form-item>
             </el-form>
           </template>
@@ -38,12 +38,11 @@
       </el-table>
       <div class="pagination">
         <el-pagination
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
           :page-size="pagesize"
           layout="total, prev, pager, next, jumper"
-          :total="projects.length">
+          :total="total">
         </el-pagination>
       </div>
     </el-row>
@@ -58,49 +57,18 @@ export default {
   data () {
     return {
       projects: [],
+      total: 0,
       currentPage: 1,
-      pagesize: 10
+      pagesize: 20
     }
   },
-  mounted: function () {
-    this.loadProjects()
-  },
-  watch: {
-    '$route': 'loadProjects'
-  },
   methods: {
-    loadProjects () {
-      this.$axios
-        .get(this.$route.path)
-        .then(response => {
-          if (response && response.status === 200) {
-            this.projects = response.data
-          }
-        })
-        .catch(failResponse => {
-          console.log('Load projects can not work correctly...')
-        })
-    },
-    search () {
-      var url = this.$route.path + '/searchByDate'
-      this.$axios
-        .post(url, {start: this.$refs.searchBar.date[0], 'end': this.$refs.searchBar.date[1]})
-        .then(successResponse => {
-          if (successResponse.status === 200) {
-            this.projects = successResponse.data
-          }
-        })
-        .catch(failResponse => {
-          console.log('日期查询失败')
-        })
+    searchByDate () {
+      this.$emit('searchByDate')
     },
     handleCurrentChange (val) {
       this.currentPage = val
-      console.log(`当前页：${val}`)
-    },
-    handleSizeChange (val) {
-      this.pagesize = val
-      console.log(`每页${val}条`)
+      this.$emit('pageSelect')
     }
   }
 }
