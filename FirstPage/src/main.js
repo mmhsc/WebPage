@@ -6,7 +6,10 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './store'
-
+import echarts from 'echarts'
+import scroll from 'vue-seamless-scroll'
+// 滚动
+Vue.use(scroll)
 // 完整引入ElementUI
 Vue.use(ElementUI)
 
@@ -17,6 +20,9 @@ axios.defaults.baseURL = 'http://127.0.0.1:8443/api'
 
 // 开启withCredentials功能
 axios.defaults.withCredentials = true
+
+// echarts
+Vue.prototype.$echarts = echarts
 
 // 全局注册，之后可在其它组件中通过this.$axios()发送数据
 Vue.prototype.$axios = axios
