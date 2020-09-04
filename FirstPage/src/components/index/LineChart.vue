@@ -7,33 +7,33 @@ export default {
   name: 'LineChart',
   data () {
     return {
+      id: '',
+      title: '',
+      date: [],
+      budget: []
     }
   },
-  props: ['id', 'title', 'xData', 'yData'],
-  mounted () {
-    this.drawLine()
-  },
   methods: {
-    drawLine () {
+    draw () {
       // 基于准备好的dom，初始化echarts实例
       this.myChart = this.$echarts.init(document.getElementById(this.id))
       // 绘制图表
-      this.option = ({
-        title: this.title,
+      let option = {
+        // title: this.title,
         xAxis: {
           type: 'category',
-          data: this.xData
+          data: this.date
         },
         yAxis: {
           type: 'value'
         },
         series: [{
-          data: this.yData,
+          data: this.budget,
           type: 'line',
           smooth: true
         }]
-      })
-      this.myChart.setOption(this.option)
+      }
+      this.myChart.setOption(option)
     }
   }
 }

@@ -1,6 +1,7 @@
 package com.ftq.webpage.service;
 
 import com.ftq.webpage.dao.ProvinceDAO;
+import com.ftq.webpage.pojo.Project;
 import com.ftq.webpage.pojo.Province;
 import com.ftq.webpage.pojo.SearchCondition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ public class ProvinceService {
 
     public long count(SearchCondition condition) {
         return provinceDAO.countByCategoryInAndReleasedateBetween(condition.getCategories(), condition.getStart(), condition.getEnd());
+    }
+
+    public List<Province> getProjects(String start, String end) {
+        return provinceDAO.findByReleasedateBetween(start, end);
     }
 
     public List<Province> getProjects(SearchCondition condition) {

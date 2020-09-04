@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-aside style="width: 200px; margin-top: 20px">
-      <sideMenu @load="flushProjects" @categorySelect="categoryOn" ref="sideMenu"></sideMenu>
+      <sideMenu @init="flushProjects" @categorySelect="categoryOn" ref="sideMenu"></sideMenu>
     </el-aside>
     <el-main>
       <projects class="projectsArea" @pageSelect="pageOn" @searchByDate="dateOn" ref="projectsArea"></projects>

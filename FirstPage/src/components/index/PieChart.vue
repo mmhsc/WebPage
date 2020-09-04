@@ -7,14 +7,13 @@ export default {
   name: 'PieChart',
   data () {
     return {
+      id: '',
+      name: '饼图',
+      data: ''
     }
   },
-  props: ['id', 'name', 'data'],
-  mounted () {
-    this.drawLine()
-  },
   methods: {
-    drawLine () {
+    draw () {
       // 基于准备好的dom，初始化echarts实例
       this.myChart = this.$echarts.init(document.getElementById(this.id))
       // 绘制图表
@@ -24,7 +23,7 @@ export default {
             name: this.name,
             type: 'pie',
             radius: '55%',
-            roseType: 'angle',
+            // roseType: 'angle',
             data: this.data
           }
         ]

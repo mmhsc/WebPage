@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "city")
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-public class City {
+public class City extends Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

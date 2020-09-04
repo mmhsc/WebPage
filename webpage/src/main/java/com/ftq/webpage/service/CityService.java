@@ -26,4 +26,8 @@ public class CityService {
                 condition.getEnd(), PageRequest.of(condition.getCurrentPage() - 1, condition.getPagesize(), sort));
     }
 
+    public List<City> getProjects(String start, String end) {
+        return cityDAO.findByReleasedateBetween(start, end);
+    }
+
 }

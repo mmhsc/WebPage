@@ -11,15 +11,17 @@ count = 0
 path = "C:/Users/17604/Desktop/URL.txt"
 cities = ["济南市", "青岛市", "淄博市", "枣庄市", "潍坊市", "烟台市", "临沂市", "东营市", "德州市",
         "济宁市", "菏泽市", "聊城市", "滨州市", "泰安市", "日照市", "威海市"]
-# db = {"ip": 'localhost', "user": 'root', "pwd": 'account4FTQ', "database": 'tender'}
-db = {"ip": '47.104.188.61', "user": 'root', "pwd": 'Root@123!', "database": 'zb'}
+# db = {"ip": 'localhost', "user": 'root', "pwd": 'account4FTQ', "database": 'tender', "table": 'city'}
+db = {"ip": '47.104.188.61', "user": 'root', "pwd": 'Root@123!', "database": 'zb', "table": 'city'}
 keys = {}
-# keys = {"教育": ["大学", "学院", "学校", "研究院", "幼儿园", "中学", "高中"],
-#         "公安": ["公安", "监狱"],
-#         "法院": ["法院", "检察院"],
-#         "消防": ["消防"],
-#         "智能": ["机器人"]
-#         }
+'''
+keys = {"教育": ["大学", "学院", "学校", "研究院", "幼儿园", "中学", "高中"],
+        "公安": ["公安", "监狱"],
+        "法院": ["法院", "检察院"],
+        "消防": ["消防"],
+        "智能": ["机器人"]
+        }
+'''
 
 
 
@@ -36,18 +38,16 @@ class ThreadCrawl(threading.Thread):
                      "application/xml;q=0.9,image/webp,*/*;q=0.8"}
 
     def run(self):
-        print(self.threadName + "启动")
+        # print(self.threadName + "启动")
         while not CRAWL_EXIT:
             try:
                 url = self.urlQueue.get(False)
                 html = requests.get(url, headers=self.headers)
                 self.dataQueue.put(html)
-                global count
-                count += 1
-                print(self.threadName + "正在处理第%d条数据, 其URL为%s" % (count, url))
+                print(self.threadName + "正在处理%s" % (url))
             except:
                 pass
-        print(self.threadName + "终止")
+        # print(self.threadName + "终止")
 
 
 '''
@@ -61,19 +61,19 @@ class ThreadParse(threading.Thread):
         self.writeLock = writeLock
 
     def run(self):
-        print(self.threadName + "启动")
+        # print(self.threadName + "启动")
         while not PARSE_EXIT:
             try:
                 html = self.dataQueue.get(False)
                 self.parse(html)
             except:
                 pass
-        print(self.threadName + "终止")
+        # print(self.threadName + "终止")
 
     def parse(self, html):
         data = {}
         if html.status_code == 200:
-            soup = BeautifulSoup(html.text, 'lxml')
+            soup = BeautifulSoup(html.text, 'html.parser')
             content = soup.find(attrs={"class": "content"})
             tr = content.find_all("tr")
             data["item"] = tr[1].text  # 采购项目
@@ -88,6 +88,9 @@ class ThreadParse(threading.Thread):
             data["submitDate"] = find(content.text, "1.时间：", "\xa0")[1]                 # 递交文件时间
             data["bidDate"] = find(content.text, "1.时间：", "\xa0")[2]                    # 开标/磋商时间
         if data["category"] is not None:
+            global count
+            count += 1
+            print(self.threadName + "正在写入第%d条数据, 其项目名称为%s" % (count, data["item"]))
             to_sql(data, db["ip"], db["user"], db["pwd"], db["database"], db["table"])
         else:
             pass
@@ -167,13 +170,13 @@ def getURL(name):
     curpage = 0
     flag = True     # 标识器，标识url是否已被解析
     lastId = None
-    file = 'province.txt' if name == 'province' else 'city.txt'
+    file = './lmm/city.txt'
     with open(file, 'r') as f:
-        lastId = f.readline()
+        lastId = f.read().strip()
 
     # 构建url
-    baseUrl = 'http://www.ccgp-shandong.gov.cn/sdgp2017/site/channelall.jsp?colcode='
-    url = baseUrl + '0301' if name == 'province' else baseUrl + '0303'
+    url = 'http://www.ccgp-shandong.gov.cn/sdgp2017/site/channelall.jsp?colcode=0303'
+    # url = baseUrl + '0301' if name == 'province' else baseUrl + '0303'
 
     while flag:
         curpage += 1
@@ -181,7 +184,7 @@ def getURL(name):
         response = requests.post(url, data=formdata)
         bsObj = BeautifulSoup(response.content.decode(), 'html.parser')
 
-        for a in bsObj.findAll("a",'aa'):
+        for a in bsObj.findAll("a", "aa"):
             href = a.attrs["href"]
             id = href[-9:]
             # print("%s %s %s" %(id, lastId, (id == lastId)))
@@ -239,8 +242,8 @@ def to_sql(data, address, user, pwd, db, table):
         connection.commit()
     finally:
         connection.close()
-
-
+        
+        
 '''
     功能: 读取keywords表，构建关键字字典
     result: 表中所有数据
@@ -271,15 +274,13 @@ def getKeywords():
 '''
     主函数
 '''
-def main(name):
+def main():
     global keys
     keys = getKeywords()
     print("-------------------------\n" +
           "  正在准备新一轮数据更新   \n" +
-          time.strftime("%Y-%m-%d %H:%M:%S") +
-          "\n--------------------------\n")
-    db['table'] = 'province' if name == 'province' else 'city'
-    urls = getURL(name)
+          time.strftime("%Y-%m-%d %H:%M:%S") + "\n")
+    urls = getURL('city')
     urlQueue = Queue(len(urls))
     for i in range(len(urls)):
         urlQueue.put(urls[i])
@@ -325,11 +326,14 @@ def main(name):
     for thread in threadparse:
         thread.join()
 
-def test():
-    global keys
-    keys = getKeywords()
-    print(keys)
+    global count
+    print("新一轮数据更新完毕，本次新增%d条数据\n" % count +
+          time.strftime("%Y-%m-%d %H:%M:%S") +
+          "\n--------------------------\n")
 
-if __name__ == "__main__":
-    main('city')
-    # test()
+
+main()
+
+
+# if __name__ == "__main__":
+#     main()

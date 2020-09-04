@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" style="width: 300px; height: 300px"></div>
+  <div :id="id"></div>
 </template>
 
 <script>
@@ -7,18 +7,18 @@ export default {
   name: 'BarChart',
   data () {
     return {
+      id: '',
+      title: '',
+      location: [],
+      data: []
     }
   },
-  props: ['id', 'location', 'title', 'data'],
-  mounted () {
-    this.drawLine()
-  },
   methods: {
-    drawLine () {
+    draw () {
       // 基于准备好的dom，初始化echarts实例
       this.myChart = this.$echarts.init(document.getElementById(this.id))
       // 绘制图表
-      this.option = ({
+      let option = {
         title: { text: this.title },
         tooltip: {},
         xAxis: {
@@ -30,9 +30,16 @@ export default {
           type: 'bar',
           data: this.data
         }]
-      })
-      this.myChart.setOption(this.option)
+      }
+      this.myChart.setOption(option)
     }
   }
 }
 </script>
+<style>
+div {
+  position: center;
+  width: 100%;
+  height: 100%;
+}
+</style>

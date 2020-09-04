@@ -6,12 +6,15 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './store'
-import echarts from 'echarts'
 import scroll from 'vue-seamless-scroll'
 // 滚动
 Vue.use(scroll)
 // 完整引入ElementUI
 Vue.use(ElementUI)
+
+// 全局注册, 之后可在其它组件中通过this.$echarts来使用echarts
+var echarts = require('echarts')
+Vue.prototype.$echarts = echarts
 
 // 设置反向代理，前端请求默认发送到http://localhost.8443/api
 var axios = require('axios')

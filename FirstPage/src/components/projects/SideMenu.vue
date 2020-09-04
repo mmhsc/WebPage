@@ -33,7 +33,7 @@ export default {
         .then(resp => {
           this.categoryOptions = new Array('全部').concat(resp.data)
           this.category = this.categoryOptions
-          this.$emit('load')
+          this.$emit('init')
         })
         .catch(resp => {
           console.log('关键字初始化失败')
