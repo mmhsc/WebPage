@@ -4,10 +4,11 @@
       <Header ref="header"></Header>
     </el-header>
     <el-container  style="height: 30%">
-      <el-aside style="width: 20%;">
+      <el-aside style="width: 20%">
         <PieChart ref="pie1" id="provincePie" style="position: center"></PieChart>
       </el-aside>
       <el-main style="width: 60%">
+        <FormChart ref="form1" id="formchart"></FormChart>
       </el-main>
       <el-aside style="width: 20%">
         <PieChart ref="pie2" id="cityPie" style="position: center"></PieChart>
@@ -43,9 +44,10 @@ import BarChart from './BarChart'
 import LineChart from './LineChart'
 import ShandongMap from './ShandongMap'
 import PieChart from './PieChart'
+import FormChart from './FormChart'
 export default {
   name: 'AppIndex',
-  components: {Header, BarChart, LineChart, ShandongMap, PieChart},
+  components: {Header, BarChart, LineChart, ShandongMap, PieChart, FormChart},
   data () {
     return {
       cityProjects: [],
@@ -98,6 +100,7 @@ export default {
       this.initLine()
       this.initMapData()
       this.initPie()
+      this.initForm()
     },
     // 初始化Header组件中的数据
     initHeader () {
@@ -296,6 +299,10 @@ export default {
       this.$refs.pie2.title = '近一周市级项目采购金额分布图'
       this.$refs.pie2.data = data
       this.$refs.pie2.draw()
+    },
+    // 初始化表格
+    initForm () {
+      this.$refs.form1.recentData = this.cityProjects
     }
   }
 }
