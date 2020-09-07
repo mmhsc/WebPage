@@ -8,7 +8,7 @@ export default {
   data () {
     return {
       id: '',
-      name: '饼图',
+      title: '',
       data: ''
     }
   },
@@ -18,9 +18,16 @@ export default {
       this.myChart = this.$echarts.init(document.getElementById(this.id))
       // 绘制图表
       this.option = ({
+        title: {
+          text: this.title,
+          left: 'center'
+        },
+        tooltip: {
+          formatter: '占比: {d}%'
+        },
         series: [
           {
-            name: this.name,
+            name: '占比',
             type: 'pie',
             radius: '55%',
             // roseType: 'angle',

@@ -6,8 +6,8 @@
                 <div class="grid-content grid-con-1">
                     <i class="el-icon-info grid-con-icon"></i>
                     <div class="grid-cont-right">
-                        <div class="grid-num">{{provinceInfo.num}}</div>
-                        <div>近一周省级招标数</div>
+                      <div class="grid-num">{{provinceInfo.num}}</div>
+                      <div>近一周省级招标数</div>
                     </div>
                 </div>
             </el-card>
@@ -83,6 +83,7 @@ export default {
     color: #999;
 }
 .grid-num {
+    height: 50%;
     position: center;
     font-size: 30px;
     font-weight: bold;

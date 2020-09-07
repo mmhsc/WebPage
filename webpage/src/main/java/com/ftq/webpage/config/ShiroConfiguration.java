@@ -30,13 +30,13 @@ public class ShiroConfiguration {
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(getWARealm());
+        securityManager.setRealm(getLoginRealm());
         securityManager.setRememberMeManager(null);
         return securityManager;
     }
 
     @Bean
-    public LoginRealm getWARealm() {
+    public LoginRealm getLoginRealm() {
         LoginRealm loginRealm = new LoginRealm();
         loginRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return loginRealm;

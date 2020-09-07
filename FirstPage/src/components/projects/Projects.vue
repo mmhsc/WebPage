@@ -22,7 +22,7 @@
                 <span>{{ props.row.phonenumber }}</span>
               </el-form-item>
               <el-form-item label="预算金额">
-                <span>{{ props.row.budget }}万</span>
+                <span>{{ props.row.budget.toFixed(2) }}万</span>
               </el-form-item>
               <el-form-item label="发布日期">
                 <span>{{ props.row.releasedate }}</span>s

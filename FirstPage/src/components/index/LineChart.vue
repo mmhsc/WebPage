@@ -1,5 +1,5 @@
 <template>
-    <div :id="id" style="width: 300px; height: 300px"></div>
+    <div :id="id" class="line"></div>
 </template>
 
 <script>
@@ -19,13 +19,22 @@ export default {
       this.myChart = this.$echarts.init(document.getElementById(this.id))
       // 绘制图表
       let option = {
-        // title: this.title,
+        title: {
+          text: this.title,
+          left: 'center'
+        },
         xAxis: {
           type: 'category',
-          data: this.date
+          data: this.date,
+          axisLabel: {
+            interval: 0
+          }
         },
         yAxis: {
           type: 'value'
+        },
+        tooltip: {
+          formatter: '日期: {b}<br/>' + '金额: {c} 万'
         },
         series: [{
           data: this.budget,
@@ -40,5 +49,9 @@ export default {
 </script>
 
 <style scoped>
-
+.line{
+  position: center;
+  width: 100%;
+  height: 100%;
+}
 </style>

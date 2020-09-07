@@ -13,11 +13,21 @@
     </vue-seamless-scroll>
   </div> -->
   <el-container style="width: 100%; height: 100%; position: absolute">
-    <el-header style="height: 11%">
+    <el-header style="height: 100px">
       <Header ref="header"></Header>
     </el-header>
-    <el-container style="height: 49%">
-      <el-container style="width: 30%">
+    <el-container  style="height: 30%">
+      <el-aside style="width: 20%;">
+        <PieChart ref="pie1" id="provincePie" style="position: center"></PieChart>
+      </el-aside>
+      <el-main style="width: 60%">
+      </el-main>
+      <el-aside style="width: 20%">
+        <PieChart ref="pie2" id="cityPie" style="position: center"></PieChart>
+      </el-aside>
+    </el-container>
+    <el-container style="height: 70%">
+      <el-container style="width: 35%">
         <el-header style="width: 100%; height: 50%">
           <BarChart ref="bar1" id="provinceBar"></BarChart>
         </el-header>
@@ -25,10 +35,10 @@
           <LineChart ref="line1" id="provinceLine"></LineChart>
         </el-footer>
       </el-container>
-      <el-main style="width: 40%">
+      <el-main style="width: 30%">
         <ShandongMap ref="map"></ShandongMap>
       </el-main>
-      <el-container style="width: 30%">
+      <el-container style="width: 35%">
         <el-header style="width: 100%; height: 50%">
           <BarChart ref="bar2" id="cityBar"></BarChart>
         </el-header>
@@ -36,16 +46,6 @@
           <LineChart ref="line2" id="cityLine"></LineChart>
         </el-footer>
       </el-container>
-    </el-container>
-    <el-container  style="height: 40%">
-      <el-aside style="width: 30%;">
-        <PieChart ref="pie1" id="provincePie"></PieChart>
-      </el-aside>
-      <el-main style="width: 40%;">
-      </el-main>
-      <el-aside style="width: 30%;">
-        <PieChart ref="pie2" id="cityPie"></PieChart>
-      </el-aside>
     </el-container>
   </el-container>
 </template>
@@ -230,19 +230,19 @@ export default {
         '日照市': 0,
         '威海市': 0
       }
-      var cityData = data
+      var provinceData = JSON.parse(JSON.stringify(data))
       var keys = []
       var values = []
       for (var i = 0, len = this.provinceProjects.length; i < len; i++) {
         var location = this.provinceProjects[i]['location']
         if (location !== '') {
-          cityData[location] += 1
+          provinceData[location] += 1
         }
       }
-      for (var key in cityData) {
-        if (cityData[key] !== 0) {
+      for (var key in provinceData) {
+        if (provinceData[key] !== 0) {
           keys.push(key)
-          values.push(cityData[key])
+          values.push(provinceData[key])
         }
       }
       this.$refs.bar1.location = keys
@@ -250,19 +250,19 @@ export default {
       this.$refs.bar1.draw()
       this.$refs.bar2.id = 'cityBar'
       this.$refs.bar2.title = '市级招标项目数区域分布图'
-      var provinceData = data
+      var cityData = JSON.parse(JSON.stringify(data))
       keys = []
       values = []
-      for (i = 0, len = this.provinceProjects.length; i < len; i++) {
-        location = this.provinceProjects[i]['location']
+      for (i = 0, len = this.cityProjects.length; i < len; i++) {
+        location = this.cityProjects[i]['location']
         if (location !== '') {
-          provinceData[location] += 1
+          cityData[location] += 1
         }
       }
-      for (key in provinceData) {
-        if (provinceData[key] !== 0) {
+      for (key in cityData) {
+        if (cityData[key] !== 0) {
           keys.push(key)
-          values.push(provinceData[key])
+          values.push(cityData[key])
         }
       }
       this.$refs.bar2.location = keys
@@ -282,8 +282,11 @@ export default {
           date.push(tmp)
           budget[date.indexOf(tmp)] = this.provinceProjects[i]['budget']
         } else {
-          budget[date.indexOf(tmp)] += budget[date.indexOf(tmp)] + this.provinceProjects[i]['budget']
+          budget[date.indexOf(tmp)] += this.provinceProjects[i]['budget']
         }
+      }
+      for (i = 0; i < budget.length; i++) {
+        budget[i] = budget[i].toFixed(2)
       }
       this.$refs.line1.date = date
       this.$refs.line1.budget = budget
@@ -291,15 +294,18 @@ export default {
       date = []
       budget = []
       this.$refs.line2.id = 'cityLine'
-      this.$refs.line2.title = '近一周省级招标项目金额趋势图'
+      this.$refs.line2.title = '近一周市级招标项目金额趋势图'
       for (i = 0, len = this.cityProjects.length; i < len; i++) {
         tmp = this.cityProjects[i]['releasedate']
         if (date.indexOf(tmp) === -1) {
           date.push(tmp)
           budget[date.indexOf(tmp)] = this.cityProjects[i]['budget']
         } else {
-          budget[date.indexOf(tmp)] += budget[date.indexOf(tmp)] + this.cityProjects[i]['budget']
+          budget[date.indexOf(tmp)] += this.cityProjects[i]['budget']
         }
+      }
+      for (i = 0; i < budget.length; i++) {
+        budget[i] = budget[i].toFixed(2)
       }
       this.$refs.line2.date = date
       this.$refs.line2.budget = budget
@@ -357,30 +363,32 @@ export default {
         .catch(resp => {
           console.log('获取关键字列表失败')
         })
-      var num = new Array(categories.length)
+      var budget = new Array(categories.length)
       var tmp = ''
       for (var i = 0, len = this.provinceProjects.length; i < len; i++) {
         tmp = this.provinceProjects[i]['category']
-        num[categories.indexOf(tmp)] = (num[categories.indexOf(tmp)] === undefined) ? 0 : num[categories.indexOf(tmp)] + 1
+        budget[categories.indexOf(tmp)] = (budget[categories.indexOf(tmp)] === undefined) ? 0 : budget[categories.indexOf(tmp)] + this.provinceProjects[i]['budget']
       }
       var data = []
       for (i = 0; i < categories.length; i++) {
-        data.push({name: categories[i], value: num[i]})
+        data.push({name: categories[i], value: budget[i]})
       }
       this.$refs.pie1.id = 'provincePie'
+      this.$refs.pie1.title = '近一周省级项目采购金额分布图'
       this.$refs.pie1.data = data
       this.$refs.pie1.draw()
-      num = new Array(categories.length)
+      budget = new Array(categories.length)
       tmp = ''
       for (i = 0, len = this.cityProjects.length; i < len; i++) {
         tmp = this.cityProjects[i]['category']
-        num[categories.indexOf(tmp)] = (num[categories.indexOf(tmp)] === undefined) ? 0 : num[categories.indexOf(tmp)] + 1
+        budget[categories.indexOf(tmp)] = (budget[categories.indexOf(tmp)] === undefined) ? 0 : budget[categories.indexOf(tmp)] + this.cityProjects[i]['budget']
       }
       data = []
       for (i = 0; i < categories.length; i++) {
-        data.push({name: categories[i], value: num[i]})
+        data.push({name: categories[i], value: budget[i]})
       }
       this.$refs.pie2.id = 'cityPie'
+      this.$refs.pie2.title = '近一周市级项目采购金额分布图'
       this.$refs.pie2.data = data
       this.$refs.pie2.draw()
     }

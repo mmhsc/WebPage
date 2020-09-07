@@ -1,5 +1,5 @@
 <template>
-  <div id="main"></div>
+  <div id="main" class="map"></div>
 </template>
 
 <script>
@@ -26,7 +26,7 @@ export default {
             var pvalue = params.data['1']
             var cvalue = params.data['2']
             var total = pvalue + cvalue
-            return params.name + '<br/>' + '省级项目数' + ' : ' + pvalue + '<br/>' + '市级项目数' + ' : ' + cvalue + '<br/>' + '合计' + ' : ' + total
+            return params.name + '<br/>' + '省级项目数: ' + pvalue + '<br/>' + '市级项目数: ' + cvalue + '<br/>' + '合计: ' + total
           }
         },
         visualMap: {
@@ -58,7 +58,7 @@ export default {
 </script>
 
 <style>
-#main {
+.map{
   position: center;
   width: 100%;
   height: 100%;
